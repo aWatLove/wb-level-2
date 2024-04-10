@@ -10,19 +10,28 @@ import (
 )
 
 const (
-	CdCommand   = "cd"
-	PwdCommand  = "pwd"
+	// CdCommand - команда "cd"
+	CdCommand = "cd"
+	// PwdCommand - команда "pwd"
+	PwdCommand = "pwd"
+	// EchoCommand - команда "echo"
 	EchoCommand = "echo"
+	// KillCommand - команда "kill"
 	KillCommand = "kill"
-	PsCommand   = "ps"
+	// PsCommand - команда "ps"
+	PsCommand = "ps"
+	// QuitCommand - команда "quit"
 	QuitCommand = "quit"
 )
 
+// Commander - интерфейс команд, с методом execute
 type Commander interface {
 	execute(args ...string) ([]byte, error)
 }
 
-// Конкретные реализации команд интерфейса Commander
+// Ниже конкретные реализации команд интерфейса Commander
+
+// CommandPwd - структура команды "pwd"
 type CommandPwd struct{}
 
 func (c CommandPwd) execute(args ...string) ([]byte, error) {
@@ -33,6 +42,7 @@ func (c CommandPwd) execute(args ...string) ([]byte, error) {
 	return []byte(dir), nil
 }
 
+// CommandCd - структура команды "cd"
 type CommandCd struct{}
 
 func (c CommandCd) execute(args ...string) ([]byte, error) {
@@ -49,6 +59,7 @@ func (c CommandCd) execute(args ...string) ([]byte, error) {
 	return []byte("changed directory to " + dir), nil
 }
 
+// CommandEcho - структура команды "echo"
 type CommandEcho struct{}
 
 func (c CommandEcho) execute(args ...string) ([]byte, error) {
@@ -58,6 +69,7 @@ func (c CommandEcho) execute(args ...string) ([]byte, error) {
 	return cmd.Output()
 }
 
+// CommandKill - структура команды "kill"
 type CommandKill struct{}
 
 func (c CommandKill) execute(args ...string) ([]byte, error) {
@@ -76,6 +88,7 @@ func (c CommandKill) execute(args ...string) ([]byte, error) {
 	return []byte("process was killed"), nil
 }
 
+// CommandPs - структура команды "ps"
 type CommandPs struct{}
 
 func (c CommandPs) execute(args ...string) ([]byte, error) {
@@ -83,16 +96,18 @@ func (c CommandPs) execute(args ...string) ([]byte, error) {
 	return cmd.Output()
 }
 
-// UnixShell
+// UnixShell - структура хранящая текущую команду и вывод
 type UnixShell struct {
 	command Commander
 	output  io.Writer
 }
 
+// SetCommand - устанавливает текущую команду
 func (s *UnixShell) SetCommand(command Commander) {
 	s.command = command
 }
 
+// ExecuteCommand - выполняет команду
 func (s *UnixShell) ExecuteCommand(args ...string) {
 	bytes, err := s.command.execute(args...)
 	if err != nil {
@@ -106,6 +121,7 @@ func (s *UnixShell) ExecuteCommand(args ...string) {
 	}
 }
 
+// ExecuteCommands - вызывает слайс команд
 func (s *UnixShell) ExecuteCommands(commands []string) {
 	for _, command := range commands {
 		args := strings.Split(command, " ")
