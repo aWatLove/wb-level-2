@@ -46,7 +46,7 @@ func (h *Handler) updateEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = h.service.UpdateEvent(input.UserID, model.Event{
-		Id:          input.EventID,
+		ID:          input.EventID,
 		Name:        input.Name,
 		Description: input.Description,
 		Date:        time.Time(input.Date),
