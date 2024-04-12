@@ -6,10 +6,12 @@ import (
 	"time"
 )
 
+// Server - основная структура сервера
 type Server struct {
 	httpServer *http.Server
 }
 
+// Run - метод Server, который запускает сервер
 func (s *Server) Run(port string, handler http.Handler) error {
 	s.httpServer = &http.Server{
 		Addr:         ":" + port,
@@ -20,6 +22,7 @@ func (s *Server) Run(port string, handler http.Handler) error {
 	return s.httpServer.ListenAndServe()
 }
 
+// Shutdown - метод Server, который останавливает сервер
 func (s *Server) Shutdown(ctx context.Context) error {
 	return s.httpServer.Shutdown(ctx)
 }

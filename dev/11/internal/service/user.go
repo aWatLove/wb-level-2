@@ -15,6 +15,7 @@ const (
 	averageDaysMonth = 30
 )
 
+// GetEventsForDay - получить события за день
 func (s *Service) GetEventsForDay(id string, date time.Time) ([]model.Event, error) {
 	user, err := s.cache.GetUser(id)
 	if err != nil {
@@ -30,6 +31,7 @@ func (s *Service) GetEventsForDay(id string, date time.Time) ([]model.Event, err
 	return events, nil
 }
 
+// GetEventsForWeek - получить события за неделю
 func (s *Service) GetEventsForWeek(id string, startWeekDate time.Time) ([]model.Event, error) {
 	user, err := s.cache.GetUser(id)
 	if err != nil {
@@ -47,6 +49,7 @@ func (s *Service) GetEventsForWeek(id string, startWeekDate time.Time) ([]model.
 	return events, nil
 }
 
+// GetEventsForMonth - получить события за месяц
 func (s *Service) GetEventsForMonth(id string, startMonthDate time.Time) ([]model.Event, error) {
 	user, err := s.cache.GetUser(id)
 	if err != nil {
@@ -64,41 +67,44 @@ func (s *Service) GetEventsForMonth(id string, startMonthDate time.Time) ([]mode
 	return events, nil
 }
 
-func (s *Service) CreateEvent(userId string, event model.Event) error {
-	user, err := s.cache.GetUser(userId)
+// CreateEvent - создать событие
+func (s *Service) CreateEvent(userID string, event model.Event) error {
+	user, err := s.cache.GetUser(userID)
 	if err != nil {
 		return err
 	}
-	eventId := strconv.Itoa(len(user.Events) + 1)
-	event.Id = eventId
-	user.Events[eventId] = event
+	eventID := strconv.Itoa(len(user.Events) + 1)
+	event.ID = eventID
+	user.Events[eventID] = event
 	return nil
 }
 
-func (s *Service) UpdateEvent(userId string, event model.Event) error {
-	user, err := s.cache.GetUser(userId)
+// UpdateEvent - обновить событие
+func (s *Service) UpdateEvent(userID string, event model.Event) error {
+	user, err := s.cache.GetUser(userID)
 	if err != nil {
 		return err
 	}
-	if _, ok := user.Events[event.Id]; !ok {
+	if _, ok := user.Events[event.ID]; !ok {
 		return repository.NewErrorHandler(
-			fmt.Errorf("failed to find event with id = %s of user wth id = %s", event.Id, userId),
+			fmt.Errorf("failed to find event with id = %s of user wth id = %s", event.ID, userID),
 			http.StatusBadRequest)
 	}
-	user.Events[event.Id] = event
+	user.Events[event.ID] = event
 	return nil
 }
 
-func (s *Service) DeleteEvent(userId, eventId string) error {
-	user, err := s.cache.GetUser(userId)
+// DeleteEvent - удалить событие
+func (s *Service) DeleteEvent(userID, eventID string) error {
+	user, err := s.cache.GetUser(userID)
 	if err != nil {
 		return err
 	}
-	if _, ok := user.Events[eventId]; !ok {
+	if _, ok := user.Events[eventID]; !ok {
 		return repository.NewErrorHandler(
-			fmt.Errorf("failed to find event with id = %s of user wth id = %s", eventId, userId),
+			fmt.Errorf("failed to find event with id = %s of user wth id = %s", eventID, userID),
 			http.StatusBadRequest)
 	}
-	delete(user.Events, eventId)
+	delete(user.Events, eventID)
 	return nil
 }

@@ -35,7 +35,7 @@ func (h *Handler) decodeDeleteEventBodyJSON(r *http.Request) (*deleteEventInput,
 }
 
 func getParamsInput(url *url.URL) (string, time.Time, error) {
-	userId := url.Query().Get("user_id")
+	userID := url.Query().Get("user_id")
 	date := url.Query().Get("date")
 
 	inpDate := InputDate{}
@@ -44,5 +44,5 @@ func getParamsInput(url *url.URL) (string, time.Time, error) {
 		return "", time.Time{}, err
 	}
 
-	return userId, time.Time(inpDate), nil
+	return userID, time.Time(inpDate), nil
 }

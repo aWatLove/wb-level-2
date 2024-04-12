@@ -6,35 +6,40 @@ import (
 	"net/http"
 )
 
+// UserCacheRepo - структура кеша пользователя
 type UserCacheRepo struct {
 	cch *Cache
 }
 
+// NewUserCacheRepo - конструктор UserCacheRepo
 func NewUserCacheRepo(cch *Cache) *UserCacheRepo {
 	c := UserCacheRepo{cch: cch}
 	c.addTestUser()
 	return &c
 }
 
+// PutUser - положить пользователя в хранилище
 func (o *UserCacheRepo) PutUser(id string, user model.User) {
 	o.cch.Mutex.Lock()
 	defer o.cch.Mutex.Unlock()
 	o.cch.Data[id] = user
 }
 
-func (o *UserCacheRepo) PutUserEvent(userId string, event model.Event) error {
+// PutUserEvent - положить событие пользователя в хранилище
+func (o *UserCacheRepo) PutUserEvent(userID string, event model.Event) error {
 	o.cch.Mutex.Lock()
 	defer o.cch.Mutex.Unlock()
 
-	user, err := o.GetUser(userId)
+	user, err := o.GetUser(userID)
 	if err != nil {
 		return err
 	}
 
-	user.Events[event.Id] = event
+	user.Events[event.ID] = event
 	return nil
 }
 
+// GetUser - получить пользователя
 func (o *UserCacheRepo) GetUser(id string) (*model.User, error) {
 	o.cch.Mutex.RLock()
 	defer o.cch.Mutex.RUnlock()

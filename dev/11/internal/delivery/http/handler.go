@@ -5,14 +5,17 @@ import (
 	"net/http"
 )
 
+// Handler - основной хендлер сервера
 type Handler struct {
 	service service.User
 }
 
+// NewHandler - конструктор Handler
 func NewHandler(service service.User) *Handler {
 	return &Handler{service: service}
 }
 
+// InitRoutes - метод инициализации путей
 func (h *Handler) InitRoutes() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/create_event", h.createEvent)

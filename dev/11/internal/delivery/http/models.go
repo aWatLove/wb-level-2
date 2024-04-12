@@ -7,26 +7,27 @@ import (
 	"time"
 )
 
+// InputDate - дата из входящего запроса
 type InputDate time.Time
 
 type createEventInput struct {
-	UserId      string    `json:"user_id" validate:"required"`
+	UserID      string    `json:"user_id" validate:"required"`
 	Name        string    `json:"name" validate:"required"`
 	Description string    `json:"description" validate:"required"`
 	Date        InputDate `json:"date" validate:"required"`
 }
 
 type updateEventInput struct {
-	UserId      string    `json:"user_id" validate:"required"`
-	EventId     string    `json:"event_id" validate:"required"`
+	UserID      string    `json:"user_id" validate:"required"`
+	EventID     string    `json:"event_id" validate:"required"`
 	Name        string    `json:"name" validate:"required"`
 	Description string    `json:"description" validate:"required"`
 	Date        InputDate `json:"date" validate:"required"`
 }
 
 type deleteEventInput struct {
-	UserId  string `json:"user_id" validate:"required"`
-	EventId string `json:"event_id" validate:"required"`
+	UserID  string `json:"user_id" validate:"required"`
+	EventID string `json:"event_id" validate:"required"`
 }
 
 type successEventOutput struct {
@@ -53,6 +54,7 @@ func newErrorOutput(message string) errorOutput {
 	return errorOutput{Error: message}
 }
 
+// UnmarshalJSON - метод декодирования даты из JSON
 func (i *InputDate) UnmarshalJSON(b []byte) error {
 	s := strings.Trim(string(b), "\"")
 	t, err := time.Parse("2006-01-02", s)
@@ -63,6 +65,7 @@ func (i *InputDate) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// MarshalJSON - метод кодирования даты в JSON
 func (i InputDate) MarshalJSON() ([]byte, error) {
 	return json.Marshal(time.Time(i))
 }

@@ -1,10 +1,12 @@
 package model
 
+// User - модель структуры пользователя
 type User struct {
-	Id     string           `json:"id"`
+	ID     string           `json:"id"`
 	Events map[string]Event `json:"events"`
 }
 
+// NewUser - конструктор модели User
 func NewUser(id string) User {
-	return User{Id: id, Events: make(map[string]Event)}
+	return User{ID: id, Events: make(map[string]Event)}
 }
